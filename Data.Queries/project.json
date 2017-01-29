@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Domain.Model": "1.0.0-*",
+    "Infrastructure": "1.0.0-*",
+    "Microsoft.Extensions.Options": "1.1.0",
+    "Neo4j.Driver": "1.1.0",
+    "NETStandard.Library": "1.6.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

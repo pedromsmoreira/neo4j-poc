@@ -1,5 +1,9 @@
 ﻿namespace PoCNeo4jNetCore
 {
+    using Data.Queries;
+    using Data.Queries.MovieQueries;
+    using Data.Queries.MoviesRepository;
+    using Domain.Model;
     using Infrastructure.Configuration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -34,6 +38,9 @@
             services.AddApplicationInsightsTelemetry(this.Configuration);
 
             services.Configure<Neo4jConfig>(this.Configuration.GetSection("Neo4j"));
+
+            // Repository
+            services.AddScoped<IRepository<Movie>, MoviesRepository>();
 
             services.AddMvc();
         }

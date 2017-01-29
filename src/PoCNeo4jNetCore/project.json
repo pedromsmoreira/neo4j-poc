@@ -19,7 +19,8 @@
     "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.1.1",
     "Infrastructure": "1.0.0-*",
     "Microsoft.ApplicationInsights.AspNetCore": "1.0.2",
-    "Domain.Model": "1.0.0-*"
+    "Domain.Model": "1.0.0-*",
+    "Data.Queries": "1.0.0-*"
   },
 
   "tools": {

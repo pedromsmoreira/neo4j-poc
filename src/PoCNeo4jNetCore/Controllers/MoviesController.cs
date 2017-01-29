@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Runtime.CompilerServices;
     using System.Web.Http;
-
+    using Data.Queries;
+    using Data.Queries.MovieQueries;
     using Domain.Model;
     using Infrastructure.Configuration;
 
@@ -15,69 +17,52 @@
     [Route("api/[controller]")]
     public class MoviesController : Controller
     {
-        private readonly Neo4jConfig neo4jConfig;
-        
-        public MoviesController(IOptions<Neo4jConfig> neo4jConfig)
+        private IRepository<Movie> moviesRepository;
+
+        public MoviesController(IRepository<Movie> moviesRepository)
         {
-            this.neo4jConfig = neo4jConfig.Value;
+            this.moviesRepository = moviesRepository;
         }
 
         [HttpGet]
         public IEnumerable<Movie> GetAll([FromUri]int offset = 25)
         {
-            var movies = new Collection<Movie>();
+            var query = new GetAllMoviesQuery(offset);
 
-            using (var driver = GraphDatabase.Driver(this.neo4jConfig.Uri, AuthTokens.Basic(this.neo4jConfig.Username, this.neo4jConfig.Password)))
-            using (var session = driver.Session())
-            {
-                var result = session.Run($"MATCH (movie:Movie) RETURN movie.title AS title, movie.released AS released, movie.tagline AS tagline LIMIT {offset}");
+            query.Validate();
+            query.Build();
 
-                foreach (var record in result)
-                {
-                    movies.Add(new Movie(record["title"].As<string>(), record["tagline"].As<string>(), record["released"].As<int>()));
-                }
-            }
-            return movies;
+            var results = this.moviesRepository.Execute(query);
+
+            return results;
         }
 
         [HttpGet]
         [Route("directors")]
         public IEnumerable<Movie> GetMoviesByDirector([FromUri]string director, [FromUri]int offset = 25)
         {
-            var movies = new Collection<Movie>();
-            var query = $"MATCH(director:Person)-[:DIRECTED]->(directorMovies) WHERE director.name = '{director}' RETURN directorMovies.title AS title, directorMovies.released AS released, directorMovies.tagline AS tagline";
+            var query = new GetMoviesByDirectorQuery(director, offset);
 
-            using (var driver = GraphDatabase.Driver(this.neo4jConfig.Uri, AuthTokens.Basic(this.neo4jConfig.Username, this.neo4jConfig.Password)))
-            using (var session = driver.Session())
-            {
-                var result = session.Run(query);
+            query.Validate();
+            query.Build();
 
-                foreach (var record in result)
-                {
-                    movies.Add(new Movie(record["title"].As<string>(), record["tagline"].As<string>(), record["released"].As<int>()));
-                }
-            }
-            return movies;
+            var results = this.moviesRepository.Execute(query);
+
+            return results;
         }
 
         [HttpGet]
         [Route("actors")]
         public IEnumerable<Movie> GetMoviesByActor([FromUri]string actor, [FromUri]int offset = 25)
         {
-            var movies = new Collection<Movie>();
-            var query = $"MATCH (actor:Person)-[:ACTED_IN]->(movies) WHERE actor.name = '{actor}' RETURN movies.title AS title, movies.released AS released, movies.tagline AS tagline LIMIT {offset}";
+            var query = new GetMoviesByActorQuery(actor, offset);
 
-            using (var driver = GraphDatabase.Driver(this.neo4jConfig.Uri, AuthTokens.Basic(this.neo4jConfig.Username, this.neo4jConfig.Password)))
-            using (var session = driver.Session())
-            {
-                var result = session.Run(query);
+            query.Validate();
+            query.Build();
 
-                foreach (var record in result)
-                {
-                    movies.Add(new Movie(record["title"].As<string>(), record["tagline"].As<string>(), record["released"].As<int>()));
-                }
-            }
-            return movies;
+            var results = this.moviesRepository.Execute(query);
+
+            return results;
         }
     }
 }
