@@ -2,60 +2,72 @@
 
 namespace PoCNeo4jNetCore.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Linq;
+    using System.Web.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Model;
     using Neo4j.Driver.V1;
 
     [Route("api/[controller]")]
-    public class MoviesController : Controller
+    public partial class MoviesController : Controller
     {
         [HttpGet]
-        public IEnumerable<Person> GetAll()
+        public IEnumerable<Movie> GetAll([FromUri]int offset = 25)
         {
-            var actors = new Collection<Person>();
-            string actorName = "Hugo Weaving";
+            var movies = new Collection<Movie>();
 
-            using (var driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "neo4j")))
+            using (var driver = GraphDatabase.Driver("bolt://localhost", AuthTokens.Basic("neo4j", "neo4j")))
             using (var session = driver.Session())
             {
-               var result = session.Run($"MATCH (a:Person) WHERE a.name = \"{actorName}\" RETURN a.name AS name");
+                var result = session.Run($"MATCH (movie:Movie) RETURN movie.title AS title, movie.released AS released, movie.tagline AS tagline LIMIT {offset}");
 
                 foreach (var record in result)
                 {
-                    actors.Add(new Person(record["name"].As<string>()));
+                    movies.Add(new Movie(record["title"].As<string>(), record["tagline"].As<string>(), record["released"].As<int>()));
                 }
             }
-            return actors;
+            return movies;
         }
 
-        private List<string> CreateSomeActors()
+        [HttpGet]
+        [Route("directors")]
+        public IEnumerable<Movie> GetMoviesByDirector([FromUri]string director, [FromUri]int offset = 25)
         {
-            List<string> query = new List<string>
+            var movies = new Collection<Movie>();
+            var query = $"MATCH(director:Person)-[:DIRECTED]->(directorMovies) WHERE director.name = '{director}' RETURN directorMovies.title AS title, directorMovies.released AS released, directorMovies.tagline AS tagline";
+
+            using (var driver = GraphDatabase.Driver("bolt://localhost", AuthTokens.Basic("neo4j", "neo4j")))
+            using (var session = driver.Session())
             {
-                "CREATE (Keanu:Person {name:'Keanu Reeves', born: 1964})",
-                "CREATE (Carrie:Person { name: 'Carrie-Anne Moss', born: 1967})",
-                "CREATE (Laurence:Person { name: 'Laurence Fishburne', born: 1961})",
-                "CREATE (Hugo:Person { name: 'Hugo Weaving', born: 1960})",
-                "CREATE (LillyW:Person { name: 'Lilly Wachowski', born: 1967})",
-                "CREATE (LanaW:Person { name: 'Lana Wachowski', born: 1965})",
-                "CREATE (JoelS:Person { name: 'Joel Silver', born: 1952})"
-            };
+                var result = session.Run(query);
 
-            return query;
-
-        }
-
-        public class Person
-        {
-            public Person(string name)
-            {
-                this.Name = name;
+                foreach (var record in result)
+                {
+                    movies.Add(new Movie(record["title"].As<string>(), record["tagline"].As<string>(), record["released"].As<int>()));
+                }
             }
+            return movies;
+        }
 
-            public string Name { get; set; }
+        [HttpGet]
+        [Route("actors")]
+        public IEnumerable<Movie> GetMoviesByActor([FromUri]string actor, [FromUri]int offset = 25)
+        {
+            var movies = new Collection<Movie>();
+            var query = $"MATCH (actor:Person)-[:ACTED_IN]->(movies) WHERE actor.name = '{actor}' RETURN movies.title AS title, movies.released AS released, movies.tagline AS tagline LIMIT {offset}";
+
+            using (var driver = GraphDatabase.Driver("bolt://localhost", AuthTokens.Basic("neo4j", "neo4j")))
+            using (var session = driver.Session())
+            {
+                var result = session.Run(query);
+
+                foreach (var record in result)
+                {
+                    movies.Add(new Movie(record["title"].As<string>(), record["tagline"].As<string>(), record["released"].As<int>()));
+                }
+            }
+            return movies;
         }
     }
 }
