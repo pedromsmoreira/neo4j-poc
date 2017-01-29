@@ -18,7 +18,8 @@
     "Neo4j.Driver": "1.1.0",
     "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.1.1",
     "Infrastructure": "1.0.0-*",
-    "Microsoft.ApplicationInsights.AspNetCore": "1.0.2"
+    "Microsoft.ApplicationInsights.AspNetCore": "1.0.2",
+    "Domain.Model": "1.0.0-*"
   },
 
   "tools": {

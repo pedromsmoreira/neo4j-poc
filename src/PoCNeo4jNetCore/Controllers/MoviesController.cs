@@ -1,14 +1,15 @@
-﻿// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace PoCNeo4jNetCore.Controllers
+﻿namespace PoCNeo4jNetCore.Controllers
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Web.Http;
+
+    using Domain.Model;
     using Infrastructure.Configuration;
+
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
-    using Model;
+
     using Neo4j.Driver.V1;
 
     [Route("api/[controller]")]

@@ -1,4 +1,4 @@
-namespace PoCNeo4jNetCore.Model
+namespace Domain.Model
 {
     public class Movie
     {
