@@ -33,7 +33,7 @@
             // Add framework services.
             services.AddApplicationInsightsTelemetry(this.Configuration);
 
-            services.Configure<IDbConfiguration>(this.Configuration.GetSection("Neo4j"));
+            services.Configure<Neo4jConfig>(this.Configuration.GetSection("Neo4j"));
 
             services.AddMvc();
         }
