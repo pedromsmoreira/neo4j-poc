@@ -1,9 +1,9 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-
-namespace PoCNeo4jNetCore
+﻿namespace PoCNeo4jNetCore
 {
+    using System.IO;
+
+    using Microsoft.AspNetCore.Hosting;
+
     public class Program
     {
         public static void Main(string[] args)
