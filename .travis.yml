@@ -1,6 +1,2 @@
 language: csharp
 solution: PoCNeo4jNetCore.sln
-mono: none
-dotnet: 1.0.1
-script:
-    - xbuild ./PoCNeo4jNetCore.sln
