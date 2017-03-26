@@ -1,7 +1,6 @@
 language: csharp
 solution: PoCNeo4jNetCore.sln
-env:
-    matrix:
-        - MONO_VERSION="3.8.0"
+mono: none
+dotnet: 1.0.1
 script:
-    - xbuild /verbosity:minimal /p:Configuration=Release PoCNeo4jNetCore.sln
+    - xbuild ./PoCNeo4jNetCore.sln
