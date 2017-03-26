@@ -4,7 +4,7 @@
 
     public abstract class BaseQuery : IQuery
     {
-        public BaseQuery(int offset)
+        protected BaseQuery(int offset)
         {
             this.OffSet = offset;
         }

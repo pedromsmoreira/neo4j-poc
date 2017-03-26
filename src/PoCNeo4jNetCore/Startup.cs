@@ -1,7 +1,6 @@
 ﻿namespace PoCNeo4jNetCore
 {
     using Data.Queries;
-    using Data.Queries.MovieQueries;
     using Data.Queries.MoviesRepository;
     using Domain.Model;
     using Infrastructure.Configuration;
@@ -26,7 +25,7 @@
             }
 
             builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            this.Configuration = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -48,7 +47,7 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             app.UseApplicationInsightsRequestTelemetry();

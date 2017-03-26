@@ -37,6 +37,7 @@
                     actors.Add(new Person(record["name"].As<string>(), record["bornIn"].As<int>()));
                 }
             }
+
             return actors;
         }
     }
