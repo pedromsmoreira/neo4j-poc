@@ -1,0 +1,5 @@
+language: csharp
+solution: PoCNeo4jNetCore.sln
+script:
+    - ./build.sh
+    grep "Build Results" build.log
