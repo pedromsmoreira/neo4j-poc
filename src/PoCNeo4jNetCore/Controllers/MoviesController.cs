@@ -1,23 +1,17 @@
 ﻿namespace PoCNeo4jNetCore.Controllers
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Runtime.CompilerServices;
     using System.Web.Http;
     using Data.Queries;
     using Data.Queries.MovieQueries;
     using Domain.Model;
-    using Infrastructure.Configuration;
 
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Options;
-
-    using Neo4j.Driver.V1;
 
     [Route("api/[controller]")]
     public class MoviesController : Controller
     {
-        private IRepository<Movie> moviesRepository;
+        private readonly IRepository<Movie> moviesRepository;
 
         public MoviesController(IRepository<Movie> moviesRepository)
         {
