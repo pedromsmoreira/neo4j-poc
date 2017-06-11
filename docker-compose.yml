@@ -1,0 +1,14 @@
+services:
+  neo4j:
+    image: neo4j
+    restart: unless-stopped
+
+    ports:
+      - 7473:7473
+      - 7474:7474
+      - 7687:7687
+
+    volumes:
+      - "./import:/import"
+      - "./plugins:/plugins"
+      - "./data:/data"
