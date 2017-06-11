@@ -1,7 +1,12 @@
 language: csharp
 solution: PoCNeo4jNetCore.sln
+sudo: false
 dist: trusty
 dotnet: 1.0.4
+branches:
+    only:
+    - master
+    - /^pr\..*/
 install:
  - dotnet restore
 script:
